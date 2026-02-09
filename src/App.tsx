@@ -26,16 +26,16 @@ function ItemGraphic({ id, w, h, theme }: { id: string; w: number; h: number; th
   switch (id) {
     case 'sword': // 1x3 Tall
       return (
-        <svg viewBox="0 0 100 300" className="w-full h-full p-2" preserveAspectRatio="xMidYMid meet">
+        <svg viewBox="0 0 100 300" className="w-full h-full" preserveAspectRatio="none">
           <path 
-            d="M50 20 L50 220 M30 220 L70 220 M50 220 L50 280" 
+            d="M50 10 L50 220 M20 220 L80 220 M50 220 L50 290" 
             stroke={strokeColor} 
             strokeWidth={strokeWidth * 4} 
             fill="none" 
             className="drop-shadow-sm"
           />
           <path
-            d="M50 20 L65 60 L50 220 L35 60 Z"
+            d="M50 10 L70 50 L50 220 L30 50 Z"
             fill={strokeColor}
             fillOpacity={fillOpacity}
             stroke={strokeColor}
@@ -45,61 +45,61 @@ function ItemGraphic({ id, w, h, theme }: { id: string; w: number; h: number; th
       );
     case 'potion': // 1x1
       return (
-        <svg viewBox="0 0 100 100" className="w-full h-full p-2" preserveAspectRatio="xMidYMid meet">
+        <svg viewBox="0 0 100 100" className="w-full h-full" preserveAspectRatio="none">
           <path
-            d="M50 20 L50 40 L25 80 L75 80 L50 40"
+            d="M50 15 L50 35 L20 85 L80 85 L50 35"
             fill={strokeColor}
             fillOpacity={fillOpacity}
             stroke={strokeColor}
             strokeWidth={strokeWidth * 2}
           />
-          <path d="M35 30 L65 30" stroke={strokeColor} strokeWidth={strokeWidth * 2} />
+          <path d="M30 25 L70 25" stroke={strokeColor} strokeWidth={strokeWidth * 2} />
         </svg>
       );
     case 'scroll': // 2x2 Square-ish
       return (
-        <svg viewBox="0 0 200 200" className="w-full h-full p-4" preserveAspectRatio="xMidYMid meet">
+        <svg viewBox="0 0 200 200" className="w-full h-full" preserveAspectRatio="none">
           <path
-            d="M40 40 Q100 20 160 40 V160 Q100 140 40 160 Z"
+            d="M20 20 Q100 0 180 20 V180 Q100 160 20 180 Z"
             fill={strokeColor}
             fillOpacity={fillOpacity}
             stroke={strokeColor}
             strokeWidth={strokeWidth * 2}
           />
-          <path d="M60 60 H140 M60 90 H140 M60 120 H120" stroke={strokeColor} strokeWidth={strokeWidth * 2} strokeLinecap="round" />
+          <path d="M40 50 H160 M40 90 H160 M40 130 H120" stroke={strokeColor} strokeWidth={strokeWidth * 2} strokeLinecap="round" />
         </svg>
       );
     case 'junk': // 2x2
       return (
-        <svg viewBox="0 0 200 200" className="w-full h-full p-4" preserveAspectRatio="xMidYMid meet">
+        <svg viewBox="0 0 200 200" className="w-full h-full" preserveAspectRatio="none">
           <path
-            d="M100 20 L180 80 L160 180 L40 180 L20 80 Z"
+            d="M10 10 L190 10 L190 190 L10 190 Z"
             fill={strokeColor}
-            fillOpacity={fillOpacity}
+            fillOpacity={fillOpacity * 2}
             stroke={strokeColor}
             strokeWidth={strokeWidth * 2}
           />
-          <path d="M20 80 L180 80 M100 20 L100 80 M160 180 L100 80 L40 180" stroke={strokeColor} strokeWidth={strokeWidth} strokeOpacity="0.5" />
+          <path d="M10 10 L190 190 M190 10 L10 190" stroke={strokeColor} strokeWidth={strokeWidth} strokeOpacity="0.5" />
         </svg>
       );
     case 'chip': // 1x1
       return (
-        <svg viewBox="0 0 100 100" className="w-full h-full p-2" preserveAspectRatio="xMidYMid meet">
-          <rect x="20" y="20" width="60" height="60" rx="5" fill={strokeColor} fillOpacity={fillOpacity} stroke={strokeColor} strokeWidth={strokeWidth * 2} />
-          <path d="M20 35 H10 M20 50 H10 M20 65 H10 M80 35 H90 M80 50 H90 M80 65 H90 M35 20 V10 M50 20 V10 M65 20 V10 M35 80 V90 M50 80 V90 M65 80 V90" stroke={strokeColor} strokeWidth={strokeWidth * 2} />
+        <svg viewBox="0 0 100 100" className="w-full h-full" preserveAspectRatio="none">
+          <rect x="10" y="10" width="80" height="80" rx="5" fill={strokeColor} fillOpacity={fillOpacity} stroke={strokeColor} strokeWidth={strokeWidth * 2} />
+          <path d="M10 25 H5 M10 50 H5 M10 75 H5 M90 25 H95 M90 50 H95 M90 75 H95 M25 10 V5 M50 10 V5 M75 10 V5 M25 90 V95 M50 90 V95 M75 90 V95" stroke={strokeColor} strokeWidth={strokeWidth * 2} />
         </svg>
       );
     case 'relic': // 1x1
       return (
-        <svg viewBox="0 0 100 100" className="w-full h-full p-2" preserveAspectRatio="xMidYMid meet">
+        <svg viewBox="0 0 100 100" className="w-full h-full" preserveAspectRatio="none">
           <path
-            d="M50 10 L90 50 L50 90 L10 50 Z"
+            d="M50 5 L95 50 L50 95 L5 50 Z"
             fill={strokeColor}
             fillOpacity={fillOpacity}
             stroke={strokeColor}
             strokeWidth={strokeWidth * 2}
           />
-          <circle cx="50" cy="50" r="15" fill="none" stroke={strokeColor} strokeWidth={strokeWidth} />
+          <circle cx="50" cy="50" r="20" fill="none" stroke={strokeColor} strokeWidth={strokeWidth} />
         </svg>
       );
     default:
