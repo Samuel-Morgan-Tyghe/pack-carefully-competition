@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Flame, Activity, Skull, Shield, Sword, Eye, Zap, Gem, ChevronDown, Check } from 'lucide-react';
 import clsx from 'clsx';
 
-type Theme = 'CURSED' | 'CYBER' | 'ARCTIC' | 'AUTOMATA' | 'PHANTOM' | 'BRUTALIST' | 'VAPOR' | 'NOIR' | 'PAPER' | 'TERMINAL' | 'CANDY' | 'STEAM' | 'GLASS' | 'MIDNIGHT' | 'ROYAL' | 'WIREFRAME';
+type Theme = 'ELDEN' | 'HADES' | 'PERSONA' | 'CURSED' | 'CYBER' | 'ARCTIC' | 'AUTOMATA' | 'PHANTOM' | 'BRUTALIST' | 'VAPOR' | 'NOIR' | 'PAPER' | 'TERMINAL' | 'CANDY' | 'STEAM' | 'GLASS' | 'MIDNIGHT' | 'ROYAL' | 'WIREFRAME';
 
 // --- Global Types ---
 interface Item {
@@ -26,6 +26,63 @@ const ITEMS: Item[] = [
 
 // --- Theme Configurations ---
 const themes = {
+  ELDEN: {
+    label: "Grace",
+    bg: 'bg-[#0f0e0b]',
+    text: 'text-[#d4cbb8]',
+    font: 'font-serif tracking-widest',
+    accent: 'bg-[#9f854a]',
+    danger: 'bg-[#6b1e1e]',
+    gridBg: 'bg-[radial-gradient(circle_at_center,rgba(159,133,74,0.1),transparent)] border border-[#3d382f] shadow-[inset_0_0_100px_rgba(0,0,0,0.8)]',
+    container: 'rounded-sm border border-[#3d382f]',
+    itemStyles: {
+      WEAPON: 'bg-black/40 border border-[#5c5443] text-[#d4cbb8] hover:bg-[#1a1814]',
+      POTION: 'bg-[#3d1a1a]/40 border border-[#5c2e2e] text-[#d65f5f]',
+      SCROLL: 'bg-[#2b261d]/40 border border-[#5c5443] text-[#d4cbb8]',
+      JUNK: 'bg-black/20 border border-[#262421] text-[#666157]',
+      TECH: 'bg-[#2b261d]/40 border border-[#9f854a] text-[#ffd700]',
+      RELIC: 'bg-[#1a1814] border border-[#d4cbb8] text-[#fff] shadow-[0_0_15px_rgba(212,203,184,0.1)]',
+    },
+    traitorOverlay: 'bg-[#0f0e0b]/90 border-y-2 border-[#9f854a] backdrop-blur-sm',
+  },
+  HADES: {
+    label: "Underworld",
+    bg: 'bg-[#1a0b0f]',
+    text: 'text-[#ffbd4a]',
+    font: 'font-serif font-bold uppercase tracking-wider',
+    accent: 'bg-[#e91e63]',
+    danger: 'bg-[#ff003c]',
+    gridBg: 'bg-[#2d1218] border-2 border-[#59232c] shadow-[0_0_30px_rgba(233,30,99,0.1)]',
+    container: 'rounded-none border-2 border-[#ffbd4a]',
+    itemStyles: {
+      WEAPON: 'bg-[#2d1218] border border-[#ffbd4a] text-[#ffbd4a] hover:bg-[#3d1820]',
+      POTION: 'bg-[#2d1218] border border-[#ff003c] text-[#ff003c]',
+      SCROLL: 'bg-[#2d1218] border border-[#00f2fe] text-[#00f2fe]',
+      JUNK: 'bg-[#1f0d11] border border-[#4a1d26] text-[#6d2f3c]',
+      TECH: 'bg-[#2d1218] border border-[#a259ff] text-[#a259ff]',
+      RELIC: 'bg-[#2d1218] border-2 border-[#ffbd4a] text-[#fff] shadow-[0_0_15px_rgba(255,189,74,0.3)]',
+    },
+    traitorOverlay: 'bg-[#1a0b0f]/95 border-4 border-[#ff003c]',
+  },
+  PERSONA: {
+    label: "Metaverse",
+    bg: 'bg-[#e60012]',
+    text: 'text-white',
+    font: 'font-sans font-black italic tracking-tighter',
+    accent: 'bg-black',
+    danger: 'bg-black text-white',
+    gridBg: 'bg-black border-4 border-white shadow-[10px_10px_0_rgba(0,0,0,0.2)] transform -rotate-1',
+    container: 'rounded-none',
+    itemStyles: {
+      WEAPON: 'bg-white text-black border-4 border-black hover:invert transition-transform hover:-translate-y-1',
+      POTION: 'bg-black text-white border-4 border-white skew-x-[-12deg]',
+      SCROLL: 'bg-[#ffd700] text-black border-4 border-black rotate-1',
+      JUNK: 'bg-[#333] text-[#666] border-4 border-[#555] -rotate-1',
+      TECH: 'bg-[#00f2fe] text-black border-4 border-black skew-x-[12deg]',
+      RELIC: 'bg-black text-white border-4 border-white rotate-2',
+    },
+    traitorOverlay: 'bg-[#e60012] bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,#000_10px,#000_20px)] border-8 border-white p-12',
+  },
   CURSED: {
     label: "Cursed Forest",
     bg: 'bg-[#1e293b]',
@@ -338,7 +395,7 @@ function ThemeSwitcher({ current, onChange }: { current: Theme; onChange: (t: Th
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="relative z-50">
+    <div className="relative z-[9999]">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={clsx(
@@ -347,6 +404,9 @@ function ThemeSwitcher({ current, onChange }: { current: Theme; onChange: (t: Th
           current === 'PHANTOM' ? "bg-black text-white -skew-x-12 border border-white" :
           current === 'AUTOMATA' ? "bg-[#cfcbb3] text-[#4a4a4a] border border-[#a8a490]" :
           current === 'CYBER' ? "bg-black text-[#10b981] border border-[#10b981] shadow-[0_0_10px_rgba(16,185,129,0.3)]" :
+          current === 'ELDEN' ? "bg-[#0f0e0b]/80 text-[#d4cbb8] border border-[#5c5443] hover:bg-[#1a1814]" :
+          current === 'HADES' ? "bg-[#2d1218] text-[#ffbd4a] border-2 border-[#59232c]" :
+          current === 'PERSONA' ? "bg-black text-white border-2 border-white -skew-x-6" :
           "bg-white/10 backdrop-blur text-current border border-white/20 hover:bg-white/20"
         )}
       >
@@ -361,7 +421,10 @@ function ThemeSwitcher({ current, onChange }: { current: Theme; onChange: (t: Th
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
             className={clsx(
-              "absolute top-full mt-2 left-0 w-full overflow-hidden flex flex-col gap-1 p-2 max-h-[60vh] overflow-y-auto z-[100]",
+              "absolute top-full mt-2 left-0 w-full overflow-hidden flex flex-col gap-1 p-2 max-h-[60vh] overflow-y-auto z-[9999] shadow-2xl",
+              current === 'ELDEN' ? "bg-[#0f0e0b]/95 border border-[#9f854a] backdrop-blur-sm" :
+              current === 'HADES' ? "bg-[#1a0b0f]/95 border-2 border-[#ffbd4a]" :
+              current === 'PERSONA' ? "bg-black border-4 border-white transform -skew-x-2" :
               current === 'BRUTALIST' ? "bg-white border-4 border-black shadow-[8px_8px_0_black]" :
               current === 'PHANTOM' ? "bg-black border-2 border-white -skew-x-6" :
               current === 'AUTOMATA' ? "bg-[#dcd8c0] border border-[#a8a490]" :
@@ -382,6 +445,9 @@ function ThemeSwitcher({ current, onChange }: { current: Theme; onChange: (t: Th
                 }}
                 className={clsx(
                   "px-4 py-3 text-left font-bold uppercase text-sm transition-all flex items-center justify-between group",
+                  current === 'ELDEN' ? "text-[#d4cbb8] hover:bg-[#2b261d]" :
+                  current === 'HADES' ? "text-[#ffbd4a] hover:bg-[#2d1218]" :
+                  current === 'PERSONA' ? "text-white hover:bg-white hover:text-black skew-x-[-12deg]" :
                   current === 'BRUTALIST' ? "hover:bg-black hover:text-white" :
                   current === 'PHANTOM' ? "text-white hover:bg-white hover:text-black hover:skew-x-6" :
                   current === 'AUTOMATA' ? "text-[#4a4a4a] hover:bg-[#cfcbb3]" :
@@ -413,7 +479,8 @@ function InventoryGrid({ theme }: { theme: Theme }) {
       theme === 'PHANTOM' && "rotate-1 scale-95", // Slight default rotation for chaos
       theme === 'PAPER' && "rotate-1",
       theme === 'GLASS' && "backdrop-blur-xl border border-white/20",
-      theme === 'MIDNIGHT' && "shadow-[0_0_50px_rgba(67,56,202,0.5)]"
+      theme === 'MIDNIGHT' && "shadow-[0_0_50px_rgba(67,56,202,0.5)]",
+      theme === 'ELDEN' && "shadow-[inset_0_0_100px_rgba(0,0,0,0.9)]"
     )}>
       {/* Background Grid Lines (Cyber Only) */}
       {theme === 'CYBER' && (
@@ -496,6 +563,9 @@ function InventoryGrid({ theme }: { theme: Theme }) {
             theme === 'ROYAL' ? "bg-[#800000] border border-[#ffd700] text-[#ffd700]" :
             theme === 'WIREFRAME' ? "bg-white border border-black text-black" :
             theme === 'STEAM' ? "bg-[#3e2723] border border-[#cd853f] text-[#d4af37]" :
+            theme === 'ELDEN' ? "bg-[#0f0e0b] border border-[#9f854a] text-[#d4cbb8]" :
+            theme === 'HADES' ? "bg-[#2d1218] border border-[#ffbd4a] text-[#ffbd4a]" :
+            theme === 'PERSONA' ? "bg-black text-white skew-x-[-12deg] border border-white" :
             "bg-black text-white rounded shadow-xl translate-y-2 group-hover:translate-y-0"
           )}>
             <div className={clsx(theme === 'PHANTOM' && "skew-x-12")}>
@@ -535,7 +605,10 @@ function TraitorAlert({ theme }: { theme: Theme }) {
           theme === 'MIDNIGHT' && "bg-[#000] border border-[#991b1b] text-[#ef4444] shadow-[0_0_50px_#991b1b]",
           theme === 'ROYAL' && "bg-[#2c0b0e] border-4 border-[#ff0000] text-[#ff0000]",
           theme === 'WIREFRAME' && "bg-transparent border-2 border-black text-black",
-          theme === 'STEAM' && "bg-[#2b2b2b] border-4 border-[#800000] text-[#ff6347]"
+          theme === 'STEAM' && "bg-[#2b2b2b] border-4 border-[#800000] text-[#ff6347]",
+          theme === 'ELDEN' && "bg-[#0f0e0b] border-y-2 border-[#9f854a] text-[#d4cbb8] shadow-[0_0_50px_rgba(159,133,74,0.3)]",
+          theme === 'HADES' && "bg-[#1a0b0f] border-2 border-[#ff003c] text-[#ff003c]",
+          theme === 'PERSONA' && "bg-black border-4 border-white skew-x-[-12deg] text-white"
         )}
       >
         <div className={clsx(theme === 'PHANTOM' && "skew-x-12")}>
@@ -557,7 +630,7 @@ function TraitorAlert({ theme }: { theme: Theme }) {
 }
 
 function App() {
-  const [theme, setTheme] = useState<Theme>('PHANTOM');
+  const [theme, setTheme] = useState<Theme>('ELDEN');
   const [showTraitor, setShowTraitor] = useState(false);
 
   const currentTheme = themes[theme];
@@ -571,6 +644,15 @@ function App() {
     )}>
       
       {/* Background Effects */}
+      {theme === 'ELDEN' && (
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(159,133,74,0.05),transparent)] pointer-events-none" />
+      )}
+      {theme === 'HADES' && (
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,#2d1218,transparent)] pointer-events-none opacity-50" />
+      )}
+      {theme === 'PERSONA' && (
+        <div className="absolute inset-0 bg-[linear-gradient(45deg,#e60012_25%,transparent_25%,transparent_75%,#e60012_75%,#e60012),linear-gradient(45deg,#e60012_25%,transparent_25%,transparent_75%,#e60012_75%,#e60012)] bg-[length:20px_20px] bg-[position:0_0,10px_10px] opacity-10 pointer-events-none" />
+      )}
       {theme === 'CURSED' && (
          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/wood-pattern.png')] opacity-20 mix-blend-overlay pointer-events-none" />
       )}
@@ -622,6 +704,9 @@ function App() {
         theme === 'BRUTALIST' ? "border-b-8 border-black bg-white" :
         theme === 'PHANTOM' ? "bg-transparent text-white -skew-y-2" :
         theme === 'AUTOMATA' ? "bg-[#cfcbb3] border border-[#a8a490] rounded-sm" :
+        theme === 'ELDEN' ? "border-b border-[#3d382f] bg-black/20 backdrop-blur-sm" :
+        theme === 'HADES' ? "border-b-2 border-[#59232c] bg-[#1a0b0f]" :
+        theme === 'PERSONA' ? "bg-black text-white skew-x-[-12deg] border-b-4 border-white" :
         "bg-black/10 backdrop-blur-md rounded-full border border-white/10 shadow-xl"
       )}>
         <h1 className={clsx(
@@ -668,6 +753,9 @@ function App() {
                 theme === 'PHANTOM' ? "bg-black text-white border-4 border-white -skew-x-3 shadow-[8px_8px_0_rgba(200,0,0,0.5)]" :
                 theme === 'BRUTALIST' ? "bg-white border-8 border-black shadow-[12px_12px_0_black]" :
                 theme === 'AUTOMATA' ? "bg-[#cfcbb3] border border-[#a8a490]" :
+                theme === 'ELDEN' ? "bg-[#0f0e0b]/90 border border-[#3d382f]" :
+                theme === 'HADES' ? "bg-[#2d1218] border-2 border-[#59232c]" :
+                theme === 'PERSONA' ? "bg-black text-white border-4 border-white skew-x-[-6deg]" :
                 "bg-white border border-slate-100 shadow-lg"
               )}
             >
@@ -714,6 +802,9 @@ function App() {
                  theme === 'ROYAL' ? "bg-[#800000] border-2 border-[#ffd700] text-[#ffd700]" :
                  theme === 'WIREFRAME' ? "bg-transparent border border-black text-black hover:bg-black hover:text-white" :
                  theme === 'STEAM' ? "bg-[#8b4513] border-2 border-[#cd853f] text-[#ffd700]" :
+                 theme === 'ELDEN' ? "bg-[#1a1814] border border-[#9f854a] text-[#d4cbb8] shadow-[inset_0_0_20px_rgba(159,133,74,0.1)]" :
+                 theme === 'HADES' ? "bg-[#2d1218] border-2 border-[#ff003c] text-[#ff003c] hover:bg-[#4a1d26]" :
+                 theme === 'PERSONA' ? "bg-white text-black border-4 border-black skew-x-[-12deg] shadow-[5px_5px_0_black]" :
                  "bg-black text-white hover:bg-slate-800"
                )}>
                  <span className={clsx("block", theme === 'PHANTOM' && "skew-y-[2deg]")}>Scavenge</span>
@@ -736,6 +827,9 @@ function App() {
                  theme === 'ROYAL' ? "bg-[#2c0b0e] border border-[#8b0000] text-[#cd853f]" :
                  theme === 'WIREFRAME' ? "bg-transparent border border-dashed border-black text-gray-500" :
                  theme === 'STEAM' ? "bg-[#3e2723] border border-[#5d4037] text-[#cd853f]" :
+                 theme === 'ELDEN' ? "bg-[#0f0e0b] border border-[#3d382f] text-[#666157]" :
+                 theme === 'HADES' ? "bg-[#1a0b0f] border-2 border-[#59232c] text-[#59232c]" :
+                 theme === 'PERSONA' ? "bg-black text-white border-4 border-white skew-x-[12deg]" :
                  "bg-slate-100 text-slate-900"
                )}>
                  <span className={clsx("block", theme === 'PHANTOM' && "skew-y-[-2deg]")}>Rest</span>
