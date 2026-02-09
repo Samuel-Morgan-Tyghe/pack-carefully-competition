@@ -17,7 +17,7 @@ interface Item {
 
 // --- Custom Item Graphics ---
 
-function ItemGraphic({ id, w, h, theme }: { id: string; w: number; h: number; theme: Theme }) {
+function ItemGraphic({ id, theme }: { id: string; theme: Theme }) {
   // Common strokes/fills based on theme
   const strokeColor = 'currentColor';
   const strokeWidth = theme === 'WIREFRAME' ? 4 : 2;
@@ -631,7 +631,7 @@ function InventoryGrid({ theme }: { theme: Theme }) {
           </div>
 
           <div className={clsx("relative w-full h-full flex items-center justify-center", theme === 'PHANTOM' && "transform skew-x-6")}>
-             <ItemGraphic id={item.id} w={item.w} h={item.h} theme={theme} />
+             <ItemGraphic id={item.id} theme={theme} />
              
              {/* Name Label */}
              <span className="absolute bottom-1 left-0 right-0 text-[8px] font-bold tracking-wider opacity-0 group-hover:opacity-100 transition-opacity uppercase text-center leading-tight bg-black/50 text-white py-0.5 pointer-events-none">
