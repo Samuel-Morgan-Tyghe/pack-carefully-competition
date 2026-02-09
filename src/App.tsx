@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Flame, Activity, Skull, Shield, Sword, Eye, Box, Zap, Gem, Ghost } from 'lucide-react';
+import { Flame, Activity, Skull, Shield, Sword, Eye, Box, Zap, Gem, Ghost, Terminal, Cpu, ChevronDown, Check } from 'lucide-react';
 import clsx from 'clsx';
 
 type Theme = 'CURSED' | 'CYBER' | 'ARCTIC' | 'AUTOMATA' | 'PHANTOM' | 'BRUTALIST';
@@ -27,6 +27,7 @@ const ITEMS: Item[] = [
 // --- Theme Configurations ---
 const themes = {
   CURSED: {
+    label: "Cursed Forest",
     bg: 'bg-[#1e293b]',
     text: 'text-[#fef3c7]',
     font: 'font-serif',
@@ -45,6 +46,7 @@ const themes = {
     traitorOverlay: 'bg-black/80 backdrop-sepia',
   },
   CYBER: {
+    label: "Neon City",
     bg: 'bg-[#0f172a]',
     text: 'text-[#10b981]',
     font: 'font-mono',
@@ -63,6 +65,7 @@ const themes = {
     traitorOverlay: 'bg-red-900/20 backdrop-blur-md border-2 border-red-500 animate-pulse',
   },
   ARCTIC: {
+    label: "Arctic Base",
     bg: 'bg-[#f8fafc]',
     text: 'text-[#0f172a]',
     font: 'font-sans',
@@ -81,6 +84,7 @@ const themes = {
     traitorOverlay: 'bg-white/90 backdrop-grayscale',
   },
   AUTOMATA: {
+    label: "Automata",
     bg: 'bg-[#dcd8c0]',
     text: 'text-[#4a4a4a]',
     font: 'font-mono tracking-wider',
@@ -99,6 +103,7 @@ const themes = {
     traitorOverlay: 'bg-[#dcd8c0]/95 mix-blend-multiply',
   },
   PHANTOM: {
+    label: "Phantom Thieves",
     bg: 'bg-[#cc0000]',
     text: 'text-white',
     font: 'font-sans font-black italic tracking-tighter',
@@ -117,6 +122,7 @@ const themes = {
     traitorOverlay: 'bg-black/90 clip-path-polygon',
   },
   BRUTALIST: {
+    label: "Neo Brutalism",
     bg: 'bg-white',
     text: 'text-black',
     font: 'font-sans font-black tracking-tighter',
@@ -138,6 +144,66 @@ const themes = {
 
 // --- Components ---
 
+function ThemeSwitcher({ current, onChange }: { current: Theme; onChange: (t: Theme) => void }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="relative z-50">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className={clsx(
+          "flex items-center gap-2 px-4 py-2 rounded-lg font-bold uppercase tracking-wider transition-all min-w-[200px] justify-between",
+          current === 'BRUTALIST' ? "bg-white text-black border-4 border-black shadow-[4px_4px_0_black]" :
+          current === 'PHANTOM' ? "bg-black text-white -skew-x-12 border border-white" :
+          current === 'AUTOMATA' ? "bg-[#cfcbb3] text-[#4a4a4a] border border-[#a8a490]" :
+          current === 'CYBER' ? "bg-black text-[#10b981] border border-[#10b981] shadow-[0_0_10px_rgba(16,185,129,0.3)]" :
+          "bg-white/10 backdrop-blur text-current border border-white/20 hover:bg-white/20"
+        )}
+      >
+        <span>{themes[current].label}</span>
+        <ChevronDown size={16} className={clsx("transition-transform", isOpen && "rotate-180")} />
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            className={clsx(
+              "absolute top-full mt-2 left-0 w-full overflow-hidden flex flex-col gap-1 p-2 max-h-[60vh] overflow-y-auto",
+              current === 'BRUTALIST' ? "bg-white border-4 border-black shadow-[8px_8px_0_black]" :
+              current === 'PHANTOM' ? "bg-black border-2 border-white -skew-x-6" :
+              current === 'AUTOMATA' ? "bg-[#dcd8c0] border border-[#a8a490]" :
+              "bg-black/90 backdrop-blur-xl border border-white/10 rounded-xl"
+            )}
+          >
+            {(Object.keys(themes) as Theme[]).map((t) => (
+              <button
+                key={t}
+                onClick={() => {
+                  onChange(t);
+                  setIsOpen(false);
+                }}
+                className={clsx(
+                  "px-4 py-3 text-left font-bold uppercase text-sm transition-all flex items-center justify-between group",
+                  current === 'BRUTALIST' ? "hover:bg-black hover:text-white" :
+                  current === 'PHANTOM' ? "text-white hover:bg-white hover:text-black hover:skew-x-6" :
+                  current === 'AUTOMATA' ? "text-[#4a4a4a] hover:bg-[#cfcbb3]" :
+                  "text-white/60 hover:text-white hover:bg-white/10 rounded-lg"
+                )}
+              >
+                <span>{themes[t].label}</span>
+                {current === t && <Check size={16} className={clsx(current === 'PHANTOM' && "animate-pulse")} />}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 function InventoryGrid({ theme }: { theme: Theme }) {
   const currentTheme = themes[theme];
   
@@ -145,7 +211,8 @@ function InventoryGrid({ theme }: { theme: Theme }) {
     <div className={clsx(
       "w-full aspect-square relative grid grid-cols-4 grid-rows-4 gap-2 p-4 overflow-hidden transition-all duration-500",
       currentTheme.gridBg,
-      currentTheme.container
+      currentTheme.container,
+      theme === 'PHANTOM' && "rotate-1 scale-95" // Slight default rotation for chaos
     )}>
       {/* Background Grid Lines (Cyber Only) */}
       {theme === 'CYBER' && (
@@ -172,21 +239,22 @@ function InventoryGrid({ theme }: { theme: Theme }) {
           key={item.id}
           layoutId={`item-${item.id}`}
           className={clsx(
-            "flex flex-col items-center justify-center p-2 cursor-grab active:cursor-grabbing select-none relative z-10 overflow-hidden",
+            "flex flex-col items-center justify-center p-2 cursor-grab active:cursor-grabbing select-none relative z-10 overflow-hidden group",
             currentTheme.itemStyles[item.category],
             // Size mapping
             item.w === 1 && item.h === 3 ? "row-span-3" : "",
             item.w === 2 && item.h === 2 ? "col-span-2 row-span-2" : "",
             theme === 'CURSED' && "border-2",
             theme === 'ARCTIC' && "rounded-lg shadow-sm",
-            theme === 'PHANTOM' && "skew-x-0" // Reset skew for content?
+            theme === 'PHANTOM' && "skew-x-0"
           )}
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: "spring", stiffness: 300, damping: 20, delay: i * 0.1 }}
           whileHover={{ 
             scale: 1.05, 
-            rotate: theme === 'CURSED' ? 2 : theme === 'PHANTOM' ? -5 : 0 
+            rotate: theme === 'CURSED' ? 2 : theme === 'PHANTOM' ? -5 : 0,
+            zIndex: 20
           }}
           whileTap={{ scale: 0.95 }}
         >
@@ -208,12 +276,16 @@ function InventoryGrid({ theme }: { theme: Theme }) {
           
           {/* Tooltip Effect */}
           <div className={clsx(
-            "absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 text-xs whitespace-nowrap opacity-0 hover:opacity-100 transition-opacity pointer-events-none z-50",
-            theme === 'CYBER' ? "bg-black border border-[#10b981] text-[#10b981]" : 
-            theme === 'AUTOMATA' ? "bg-[#4a4a4a] text-[#dcd8c0]" :
-            "bg-black text-white rounded"
+            "absolute -top-12 left-1/2 -translate-x-1/2 px-3 py-2 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all pointer-events-none z-50 font-bold",
+            theme === 'CYBER' ? "bg-black border border-[#10b981] text-[#10b981] shadow-[0_0_20px_rgba(16,185,129,0.5)]" : 
+            theme === 'AUTOMATA' ? "bg-[#4a4a4a] text-[#dcd8c0] border border-[#dcd8c0]" :
+            theme === 'BRUTALIST' ? "bg-black text-white border-2 border-white shadow-[4px_4px_0_white]" :
+            theme === 'PHANTOM' ? "bg-black text-white -skew-x-12 border border-white" :
+            "bg-black text-white rounded shadow-xl translate-y-2 group-hover:translate-y-0"
           )}>
-            {item.w}x{item.h} // {item.category}
+            <div className={clsx(theme === 'PHANTOM' && "skew-x-12")}>
+              {item.w}x{item.h} // {item.category}
+            </div>
           </div>
         </motion.div>
       ))}
@@ -230,29 +302,37 @@ function TraitorAlert({ theme }: { theme: Theme }) {
       currentTheme.traitorOverlay
     )}>
       <motion.div
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: -20, opacity: 0 }}
-        className="max-w-md"
+        initial={{ y: 20, opacity: 0, scale: 0.9 }}
+        animate={{ y: 0, opacity: 1, scale: 1 }}
+        exit={{ y: -20, opacity: 0, scale: 0.9 }}
+        className={clsx(
+          "max-w-md p-8",
+          theme === 'BRUTALIST' && "bg-white border-8 border-black shadow-[20px_20px_0_black]",
+          theme === 'PHANTOM' && "bg-black border-4 border-white -skew-x-12 text-white shadow-[10px_10px_0_rgba(255,0,0,0.8)]",
+          theme === 'CYBER' && "bg-black/90 border border-red-500 shadow-[0_0_50px_rgba(255,0,0,0.5)]",
+          theme === 'AUTOMATA' && "bg-[#dcd8c0] border-2 border-[#8c3a3a] text-[#8c3a3a]"
+        )}
       >
-        <Skull size={64} className={clsx("mb-4 mx-auto", 
-            theme === 'CYBER' ? "text-red-500 animate-pulse" : 
-            theme === 'BRUTALIST' ? "text-black w-32 h-32" :
-            "text-current"
-        )} />
-        <h2 className={clsx("text-4xl mb-2 font-bold uppercase", theme === 'CYBER' && "glitch-text")}>
-          TRAITOR DETECTED
-        </h2>
-        <p className="opacity-80 text-lg">
-          Someone has sabotaged the supplies. Trust no one.
-        </p>
+        <div className={clsx(theme === 'PHANTOM' && "skew-x-12")}>
+          <Skull size={64} className={clsx("mb-4 mx-auto", 
+              theme === 'CYBER' ? "text-red-500 animate-pulse" : 
+              theme === 'BRUTALIST' ? "text-black w-32 h-32" :
+              "text-current"
+          )} />
+          <h2 className={clsx("text-4xl mb-2 font-bold uppercase", theme === 'CYBER' && "glitch-text")}>
+            TRAITOR DETECTED
+          </h2>
+          <p className="opacity-80 text-lg">
+            Someone has sabotaged the supplies. Trust no one.
+          </p>
+        </div>
       </motion.div>
     </div>
   );
 }
 
 function App() {
-  const [theme, setTheme] = useState<Theme>('CURSED');
+  const [theme, setTheme] = useState<Theme>('PHANTOM');
   const [showTraitor, setShowTraitor] = useState(false);
 
   const currentTheme = themes[theme];
@@ -274,10 +354,12 @@ function App() {
       )}
       {theme === 'PHANTOM' && (
         <>
-            <div className="absolute -left-20 top-0 w-[50%] h-full bg-black skew-x-[-10deg] opacity-10 pointer-events-none" />
-            <div className="absolute -right-20 bottom-0 w-[30%] h-full bg-black skew-x-[-10deg] opacity-5 pointer-events-none" />
+            <div className="absolute -left-20 top-0 w-[150%] h-full bg-black skew-x-[-10deg] opacity-10 pointer-events-none" />
+            <div className="absolute -right-20 bottom-0 w-[150%] h-full bg-black skew-x-[-10deg] opacity-5 pointer-events-none" />
+            <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_transparent_0%,_#cc0000_100%)] opacity-50 pointer-events-none" />
             {/* Star pattern */}
-            <div className="absolute top-10 right-10 text-black opacity-20">★ ★ ★</div>
+            <div className="absolute top-10 right-10 text-black opacity-20 text-6xl font-black">★</div>
+            <div className="absolute bottom-20 left-10 text-black opacity-10 text-8xl font-black rotate-45">★</div>
         </>
       )}
       {theme === 'AUTOMATA' && (
@@ -287,50 +369,39 @@ function App() {
       {/* Header / Switcher */}
       <header className={clsx(
         "z-10 w-full max-w-4xl flex flex-col sm:flex-row justify-between items-center mb-12 p-4 gap-4 transition-all",
-        theme === 'BRUTALIST' ? "border-b-4 border-black bg-white" :
-        theme === 'PHANTOM' ? "bg-black text-white -skew-x-6 border-b-4 border-white" :
+        theme === 'BRUTALIST' ? "border-b-8 border-black bg-white" :
+        theme === 'PHANTOM' ? "bg-transparent text-white -skew-y-2" :
         theme === 'AUTOMATA' ? "bg-[#cfcbb3] border border-[#a8a490] rounded-sm" :
         "bg-black/10 backdrop-blur-md rounded-full border border-white/10 shadow-xl"
       )}>
-        <h1 className={clsx("text-2xl font-bold px-4", theme === 'PHANTOM' && "skew-x-6")}>
+        <h1 className={clsx(
+            "text-3xl font-black px-4 tracking-tighter", 
+            theme === 'PHANTOM' && "bg-black text-white p-2 skew-x-[-10deg] border-2 border-white shadow-[5px_5px_0_rgba(0,0,0,0.5)]",
+            theme === 'CYBER' && "text-transparent bg-clip-text bg-gradient-to-r from-[#10b981] to-[#ec4899] drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]"
+        )}>
             PACK CAREFULLY
         </h1>
         
-        <div className={clsx("flex flex-wrap justify-center gap-2", theme === 'PHANTOM' && "skew-x-6")}>
-          {(Object.keys(themes) as Theme[]).map((t) => (
-            <button
-              key={t}
-              onClick={() => setTheme(t)}
-              className={clsx(
-                "px-3 py-1 text-xs sm:text-sm font-bold transition-all uppercase",
-                theme === t 
-                  ? (theme === 'BRUTALIST' ? "bg-black text-white" : 
-                     theme === 'PHANTOM' ? "bg-white text-black" :
-                     theme === 'AUTOMATA' ? "bg-[#4a4a4a] text-[#dcd8c0]" :
-                     "bg-white text-black shadow-lg scale-105 rounded-full") 
-                  : "bg-transparent opacity-60 hover:opacity-100"
-              )}
+        <div className="flex items-center gap-4">
+            <ThemeSwitcher current={theme} onChange={setTheme} />
+            
+            <button 
+            onClick={() => setShowTraitor(!showTraitor)}
+            className={clsx(
+                "p-2 transition-colors relative group",
+                showTraitor ? "bg-red-500 text-white" : "hover:bg-black/10",
+                theme === 'BRUTALIST' ? "border-4 border-black bg-white hover:bg-black hover:text-white" : "rounded-full"
+            )}
+            title="Toggle Traitor Event"
             >
-              {t}
+            <Eye size={24} />
+            {theme === 'CYBER' && <span className="absolute inset-0 rounded-full animate-ping bg-red-500 opacity-20"></span>}
             </button>
-          ))}
         </div>
-
-        <button 
-          onClick={() => setShowTraitor(!showTraitor)}
-          className={clsx(
-            "p-2 transition-colors",
-            showTraitor ? "bg-red-500 text-white" : "hover:bg-black/10",
-            theme === 'BRUTALIST' ? "border-2 border-black" : "rounded-full"
-          )}
-          title="Toggle Traitor Event"
-        >
-          <Eye size={20} />
-        </button>
       </header>
 
       {/* Main Game Stage */}
-      <main className={clsx("z-10 w-full max-w-md relative aspect-[4/5]", theme === 'PHANTOM' && "-skew-x-3")}>
+      <main className={clsx("z-10 w-full max-w-md relative aspect-[4/5] transition-all duration-500", theme === 'PHANTOM' && "-skew-x-2 rotate-1")}>
         <AnimatePresence mode="wait">
           {showTraitor && <TraitorAlert key="traitor" theme={theme} />}
         </AnimatePresence>
@@ -344,29 +415,29 @@ function App() {
                 currentTheme.container,
                 theme === 'CURSED' ? "bg-[#4a3627] border-2 border-[#f59e0b] shadow-lg" :
                 theme === 'CYBER' ? "bg-[#0f172a]/80 border border-[#10b981] shadow-[0_0_15px_rgba(16,185,129,0.2)] backdrop-blur-sm" :
-                theme === 'PHANTOM' ? "bg-black text-white border-2 border-white -skew-x-3" :
-                theme === 'BRUTALIST' ? "bg-white border-4 border-black shadow-[8px_8px_0_black]" :
+                theme === 'PHANTOM' ? "bg-black text-white border-4 border-white -skew-x-3 shadow-[8px_8px_0_rgba(200,0,0,0.5)]" :
+                theme === 'BRUTALIST' ? "bg-white border-8 border-black shadow-[12px_12px_0_black]" :
                 theme === 'AUTOMATA' ? "bg-[#cfcbb3] border border-[#a8a490]" :
                 "bg-white border border-slate-100 shadow-lg"
               )}
             >
-              <div className={clsx("flex items-center gap-3", theme === 'PHANTOM' && "skew-x-3")}>
+              <div className={clsx("flex items-center gap-4", theme === 'PHANTOM' && "skew-x-3")}>
                 <div className={clsx(
-                    "w-10 h-10 flex items-center justify-center font-bold", 
+                    "w-12 h-12 flex items-center justify-center font-bold text-xl", 
                     currentTheme.accent, 
                     theme === 'ARCTIC' && "text-white",
-                    theme === 'BRUTALIST' ? "rounded-none" : "rounded-full"
+                    theme === 'BRUTALIST' ? "rounded-none border-2 border-white" : "rounded-full"
                 )}>
                   P1
                 </div>
                 <div>
-                  <div className="text-xs opacity-60 uppercase tracking-widest">Status</div>
-                  <div className="font-bold">HEALTHY</div>
+                  <div className="text-xs opacity-60 uppercase tracking-widest font-bold">Condition</div>
+                  <div className="font-bold text-lg">OPTIMAL</div>
                 </div>
               </div>
               <div className={clsx("text-right", theme === 'PHANTOM' && "skew-x-3")}>
-                <div className="text-xs opacity-60 uppercase tracking-widest">Morale</div>
-                <div className="font-bold text-xl">100%</div>
+                <div className="text-xs opacity-60 uppercase tracking-widest font-bold">Morale</div>
+                <div className="font-bold text-2xl">100%</div>
               </div>
             </motion.div>
 
@@ -376,28 +447,28 @@ function App() {
             {/* Action Bar */}
             <div className={clsx("grid grid-cols-2 gap-4 mt-auto", theme === 'PHANTOM' && "gap-6")}>
                <button className={clsx(
-                 "py-4 font-bold uppercase tracking-wider transition-all active:scale-95",
+                 "py-4 font-black uppercase tracking-widest text-lg transition-all active:scale-95",
                  currentTheme.container,
                  theme === 'CURSED' ? "bg-[#f59e0b] text-[#4a3627] shadow-[4px_4px_0_rgba(0,0,0,0.5)] border-2 border-[#4a3627]" :
                  theme === 'CYBER' ? "bg-transparent border border-[#10b981] text-[#10b981] hover:bg-[#10b981]/10 shadow-[0_0_10px_#10b981]" :
-                 theme === 'PHANTOM' ? "bg-black text-white border-2 border-white hover:bg-white hover:text-black skew-x-[-10deg]" :
+                 theme === 'PHANTOM' ? "bg-white text-black border-4 border-black hover:bg-black hover:text-white skew-y-[-2deg] shadow-[5px_5px_0_black]" :
                  theme === 'BRUTALIST' ? "bg-black text-white border-4 border-black hover:bg-white hover:text-black shadow-[8px_8px_0_black]" :
                  theme === 'AUTOMATA' ? "bg-[#4a4a4a] text-[#dcd8c0] border border-[#4a4a4a] hover:bg-[#333]" :
                  "bg-black text-white hover:bg-slate-800"
                )}>
-                 <span className={clsx("block", theme === 'PHANTOM' && "skew-x-[10deg]")}>Scavenge</span>
+                 <span className={clsx("block", theme === 'PHANTOM' && "skew-y-[2deg]")}>Scavenge</span>
                </button>
                <button className={clsx(
-                 "py-4 font-bold uppercase tracking-wider transition-all active:scale-95 opacity-80 hover:opacity-100",
+                 "py-4 font-black uppercase tracking-widest text-lg transition-all active:scale-95 opacity-80 hover:opacity-100",
                  currentTheme.container,
                  theme === 'CURSED' ? "bg-[#4a3627] text-[#fef3c7] border-2 border-[#f59e0b]" :
                  theme === 'CYBER' ? "bg-transparent border border-[#ec4899] text-[#ec4899] hover:bg-[#ec4899]/10" :
-                 theme === 'PHANTOM' ? "bg-white text-black border-2 border-black hover:bg-black hover:text-white skew-x-[-10deg]" :
+                 theme === 'PHANTOM' ? "bg-black text-white border-4 border-white hover:bg-white hover:text-black skew-y-[2deg] shadow-[5px_5px_0_white]" :
                  theme === 'BRUTALIST' ? "bg-white text-black border-4 border-black shadow-[8px_8px_0_black]" :
                  theme === 'AUTOMATA' ? "bg-[#cfcbb3] text-[#4a4a4a] border border-[#a8a490] hover:bg-[#c4c0a8]" :
                  "bg-slate-100 text-slate-900"
                )}>
-                 <span className={clsx("block", theme === 'PHANTOM' && "skew-x-[10deg]")}>Rest</span>
+                 <span className={clsx("block", theme === 'PHANTOM' && "skew-y-[-2deg]")}>Rest</span>
                </button>
             </div>
         </div>
