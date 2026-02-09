@@ -15,6 +15,98 @@ interface Item {
   h: number;
 }
 
+// --- Custom Item Graphics ---
+
+function ItemGraphic({ id, w, h, theme }: { id: string; w: number; h: number; theme: Theme }) {
+  // Common strokes/fills based on theme
+  const strokeColor = 'currentColor';
+  const strokeWidth = theme === 'WIREFRAME' ? 4 : 2;
+  const fillOpacity = theme === 'WIREFRAME' ? 0 : 0.2;
+
+  switch (id) {
+    case 'sword': // 1x3 Tall
+      return (
+        <svg viewBox="0 0 100 300" className="w-full h-full p-2" preserveAspectRatio="xMidYMid meet">
+          <path 
+            d="M50 20 L50 220 M30 220 L70 220 M50 220 L50 280" 
+            stroke={strokeColor} 
+            strokeWidth={strokeWidth * 4} 
+            fill="none" 
+            className="drop-shadow-sm"
+          />
+          <path
+            d="M50 20 L65 60 L50 220 L35 60 Z"
+            fill={strokeColor}
+            fillOpacity={fillOpacity}
+            stroke={strokeColor}
+            strokeWidth={strokeWidth}
+          />
+        </svg>
+      );
+    case 'potion': // 1x1
+      return (
+        <svg viewBox="0 0 100 100" className="w-full h-full p-2" preserveAspectRatio="xMidYMid meet">
+          <path
+            d="M50 20 L50 40 L25 80 L75 80 L50 40"
+            fill={strokeColor}
+            fillOpacity={fillOpacity}
+            stroke={strokeColor}
+            strokeWidth={strokeWidth * 2}
+          />
+          <path d="M35 30 L65 30" stroke={strokeColor} strokeWidth={strokeWidth * 2} />
+        </svg>
+      );
+    case 'scroll': // 2x2 Square-ish
+      return (
+        <svg viewBox="0 0 200 200" className="w-full h-full p-4" preserveAspectRatio="xMidYMid meet">
+          <path
+            d="M40 40 Q100 20 160 40 V160 Q100 140 40 160 Z"
+            fill={strokeColor}
+            fillOpacity={fillOpacity}
+            stroke={strokeColor}
+            strokeWidth={strokeWidth * 2}
+          />
+          <path d="M60 60 H140 M60 90 H140 M60 120 H120" stroke={strokeColor} strokeWidth={strokeWidth * 2} strokeLinecap="round" />
+        </svg>
+      );
+    case 'junk': // 2x2
+      return (
+        <svg viewBox="0 0 200 200" className="w-full h-full p-4" preserveAspectRatio="xMidYMid meet">
+          <path
+            d="M100 20 L180 80 L160 180 L40 180 L20 80 Z"
+            fill={strokeColor}
+            fillOpacity={fillOpacity}
+            stroke={strokeColor}
+            strokeWidth={strokeWidth * 2}
+          />
+          <path d="M20 80 L180 80 M100 20 L100 80 M160 180 L100 80 L40 180" stroke={strokeColor} strokeWidth={strokeWidth} strokeOpacity="0.5" />
+        </svg>
+      );
+    case 'chip': // 1x1
+      return (
+        <svg viewBox="0 0 100 100" className="w-full h-full p-2" preserveAspectRatio="xMidYMid meet">
+          <rect x="20" y="20" width="60" height="60" rx="5" fill={strokeColor} fillOpacity={fillOpacity} stroke={strokeColor} strokeWidth={strokeWidth * 2} />
+          <path d="M20 35 H10 M20 50 H10 M20 65 H10 M80 35 H90 M80 50 H90 M80 65 H90 M35 20 V10 M50 20 V10 M65 20 V10 M35 80 V90 M50 80 V90 M65 80 V90" stroke={strokeColor} strokeWidth={strokeWidth * 2} />
+        </svg>
+      );
+    case 'relic': // 1x1
+      return (
+        <svg viewBox="0 0 100 100" className="w-full h-full p-2" preserveAspectRatio="xMidYMid meet">
+          <path
+            d="M50 10 L90 50 L50 90 L10 50 Z"
+            fill={strokeColor}
+            fillOpacity={fillOpacity}
+            stroke={strokeColor}
+            strokeWidth={strokeWidth * 2}
+          />
+          <circle cx="50" cy="50" r="15" fill="none" stroke={strokeColor} strokeWidth={strokeWidth} />
+        </svg>
+      );
+    default:
+      return null;
+  }
+}
+
 const ITEMS: Item[] = [
   { id: 'sword', name: 'Iron Sword', category: 'WEAPON', icon: <Sword size={24} />, w: 1, h: 3 },
   { id: 'potion', name: 'Health Potion', category: 'POTION', icon: <Activity size={24} />, w: 1, h: 1 },
@@ -507,7 +599,7 @@ function InventoryGrid({ theme }: { theme: Theme }) {
           key={item.id}
           layoutId={`item-${item.id}`}
           className={clsx(
-            "flex flex-col items-center justify-center p-2 cursor-grab active:cursor-grabbing select-none relative z-10 overflow-hidden group",
+            "flex flex-col items-center justify-center cursor-grab active:cursor-grabbing select-none relative z-10 overflow-hidden group",
             currentTheme.itemStyles[item.category],
             // Size mapping
             item.w === 1 && item.h === 3 ? "row-span-3" : "",
@@ -530,21 +622,22 @@ function InventoryGrid({ theme }: { theme: Theme }) {
           }}
           whileTap={{ scale: 0.95 }}
         >
-          {theme === 'PHANTOM' ? (
-             <div className="transform skew-x-6 flex flex-col items-center">
-                {item.icon}
-                <span className="text-[10px] mt-1 font-bold tracking-wider opacity-80 uppercase text-center leading-tight">
-                    {item.name}
-                </span>
-             </div>
-          ) : (
-            <>
-                {item.icon}
-                <span className="text-[10px] mt-1 font-bold tracking-wider opacity-80 uppercase text-center leading-tight">
-                    {item.name}
-                </span>
-            </>
-          )}
+          {/* Sub-grid pattern for occupying multiple cells (Tetris feel) */}
+          <div className="absolute inset-0 grid w-full h-full opacity-10 pointer-events-none" 
+               style={{ gridTemplateColumns: `repeat(${item.w}, 1fr)`, gridTemplateRows: `repeat(${item.h}, 1fr)` }}>
+             {[...Array(item.w * item.h)].map((_, idx) => (
+                <div key={idx} className="border-[0.5px] border-current" />
+             ))}
+          </div>
+
+          <div className={clsx("relative w-full h-full flex items-center justify-center", theme === 'PHANTOM' && "transform skew-x-6")}>
+             <ItemGraphic id={item.id} w={item.w} h={item.h} theme={theme} />
+             
+             {/* Name Label */}
+             <span className="absolute bottom-1 left-0 right-0 text-[8px] font-bold tracking-wider opacity-0 group-hover:opacity-100 transition-opacity uppercase text-center leading-tight bg-black/50 text-white py-0.5 pointer-events-none">
+                {item.name}
+             </span>
+          </div>
           
           {/* Tooltip Effect */}
           <div className={clsx(
