@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Flame, Activity, Zap, Skull, Shield, Sword, Eye } from 'lucide-react';
+import { Flame, Activity, Skull, Shield, Sword, Eye } from 'lucide-react';
 import clsx from 'clsx';
-import { twMerge } from 'tailwind-merge';
 
 type Theme = 'CURSED' | 'CYBER' | 'ARCTIC';
 
@@ -89,6 +88,11 @@ function InventoryGrid({ theme }: { theme: Theme }) {
             <div key={i} className="border border-[#10b981]" />
           ))}
         </div>
+      )}
+      
+      {/* Background Noise (Cursed Only) */}
+      {theme === 'CURSED' && (
+         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/wood-pattern.png')] opacity-10 mix-blend-overlay pointer-events-none" />
       )}
 
       {/* Items */}
