@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Flame, Activity, Skull, Shield, Sword, Eye, Box, Zap, Gem, Ghost, Terminal, Cpu, ChevronDown, Check } from 'lucide-react';
+import { Flame, Activity, Skull, Shield, Sword, Eye, Zap, Gem, ChevronDown, Check } from 'lucide-react';
 import clsx from 'clsx';
 
 type Theme = 'CURSED' | 'CYBER' | 'ARCTIC' | 'AUTOMATA' | 'PHANTOM' | 'BRUTALIST';
