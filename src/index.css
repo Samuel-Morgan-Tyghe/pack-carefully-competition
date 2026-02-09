@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=Orbitron:wght@400;700&family=Inter:wght@300;400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-shadow-sm {
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+  }
+  .text-shadow-glow {
+    text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+  }
+}
