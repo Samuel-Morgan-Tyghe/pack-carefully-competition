@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Flame, Activity, Skull, Shield, Sword, Eye, Zap, Gem, ChevronDown, Check } from 'lucide-react';
+import { Skull, Sword, Eye, ChevronDown, Check } from 'lucide-react';
 import clsx from 'clsx';
 
 type Theme = 'ELDEN' | 'HADES' | 'PERSONA' | 'CURSED' | 'CYBER' | 'ARCTIC' | 'AUTOMATA' | 'PHANTOM' | 'BRUTALIST' | 'VAPOR' | 'NOIR' | 'PAPER' | 'TERMINAL' | 'CANDY' | 'STEAM' | 'GLASS' | 'MIDNIGHT' | 'ROYAL' | 'WIREFRAME';
@@ -664,7 +664,7 @@ function Dropdown<T extends string>({
               <button
                 key={opt.id}
                 onClick={() => {
-                  onChange(opt.id as any);
+                  onChange(opt.id as T);
                   setIsOpen(false);
                 }}
                 className={clsx(
