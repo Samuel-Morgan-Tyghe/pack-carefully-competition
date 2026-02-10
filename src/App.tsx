@@ -619,7 +619,7 @@ function Dropdown<T extends string>({
   // const currentTheme = themes[theme];
 
   return (
-    <div className="relative z-[9999]">
+    <div className={clsx("relative", isOpen ? "z-[10000]" : "z-[50]")}>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={clsx(
