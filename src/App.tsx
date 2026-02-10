@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Flame, Activity, Skull, Shield, Sword, Eye, Zap, Gem, ChevronDown, Check, Swords, Info, Layout, Backpack } from 'lucide-react';
+import { Flame, Activity, Skull, Shield, Sword, Eye, Zap, Gem, ChevronDown, Check } from 'lucide-react';
 import clsx from 'clsx';
 
 type Theme = 'ELDEN' | 'HADES' | 'PERSONA' | 'CURSED' | 'CYBER' | 'ARCTIC' | 'AUTOMATA' | 'PHANTOM' | 'BRUTALIST' | 'VAPOR' | 'NOIR' | 'PAPER' | 'TERMINAL' | 'CANDY' | 'STEAM' | 'GLASS' | 'MIDNIGHT' | 'ROYAL' | 'WIREFRAME';
@@ -601,21 +601,22 @@ function ItemGraphic({ id, theme }: { id: string; theme: Theme }) {
 
 // --- Components ---
 
-function Dropdown({ 
+function Dropdown<T extends string>({ 
   value, 
   options, 
   onChange, 
   theme, 
   label 
 }: { 
-  value: string; 
+  value: T; 
   options: { id: string; label: string }[]; 
-  onChange: (val: any) => void; 
+  onChange: (val: T) => void; 
   theme: Theme; 
   label?: string 
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const currentTheme = themes[theme];
+  // Remove unused currentTheme variable
+  // const currentTheme = themes[theme];
 
   return (
     <div className="relative z-[9999]">
@@ -1139,14 +1140,14 @@ function App() {
                    theme === 'PAPER' ? "bg-[#ff9999] text-white border-2 border-[#ff7777] shadow-md -rotate-1" :
                    theme === 'TERMINAL' ? "bg-black border border-[#00ff00] text-[#00ff00] hover:bg-[#003300]" :
                    theme === 'CANDY' ? "bg-[#ff69b4] text-white rounded-xl shadow-[0_4px_0_#d63384]" :
-                   theme === 'GLASS' ? "bg-white/20 backdrop-blur-md border border-white/30 text-white" :
-                   theme === 'MIDNIGHT' ? "bg-[#4338ca] text-white shadow-[0_0_20px_#4338ca]" :
-                   theme === 'ROYAL' ? "bg-[#800000] border-2 border-[#ffd700] text-[#ffd700]" :
-                   theme === 'WIREFRAME' ? "bg-transparent border border-black text-black hover:bg-black hover:text-white" :
-                   theme === 'STEAM' ? "bg-[#8b4513] border-2 border-[#cd853f] text-[#ffd700]" :
-                   theme === 'ELDEN' ? "bg-[#1a1814] border border-[#9f854a] text-[#d4cbb8] shadow-[inset_0_0_20px_rgba(159,133,74,0.1)]" :
-                   theme === 'HADES' ? "bg-[#2d1218] border-2 border-[#ff003c] text-[#ff003c] hover:bg-[#4a1d26]" :
-                   theme === 'PERSONA' ? "bg-white text-black border-4 border-black skew-x-[-12deg] shadow-[5px_5px_0_black]" :
+                   theme === 'GLASS' ? "bg-white/20 backdrop-blur-md border border-white/20 text-white/80" :
+                   theme === 'MIDNIGHT' ? "bg-[#1e1b4b] border border-[#312e81] text-[#6366f1]" :
+                   theme === 'ROYAL' ? "bg-[#2c0b0e] border border-[#8b0000] text-[#cd853f]" :
+                   theme === 'WIREFRAME' ? "bg-transparent border border-dashed border-black text-gray-500" :
+                   theme === 'STEAM' ? "bg-[#3e2723] border border-[#5d4037] text-[#cd853f]" :
+                   theme === 'ELDEN' ? "bg-[#0f0e0b] border border-[#3d382f] text-[#666157]" :
+                   theme === 'HADES' ? "bg-[#1a0b0f] border-2 border-[#59232c] text-[#59232c]" :
+                   theme === 'PERSONA' ? "bg-black text-white border-4 border-white skew-x-[12deg]" :
                    "bg-black text-white hover:bg-slate-800"
                  )}>
                    <span className={clsx("block", theme === 'PHANTOM' && "skew-y-[2deg]")}>Scavenge</span>
@@ -1169,9 +1170,6 @@ function App() {
                    theme === 'ROYAL' ? "bg-[#2c0b0e] border border-[#8b0000] text-[#cd853f]" :
                    theme === 'WIREFRAME' ? "bg-transparent border border-dashed border-black text-gray-500" :
                    theme === 'STEAM' ? "bg-[#3e2723] border border-[#5d4037] text-[#cd853f]" :
-                   theme === 'ELDEN' ? "bg-[#0f0e0b] border border-[#3d382f] text-[#666157]" :
-                   theme === 'HADES' ? "bg-[#1a0b0f] border-2 border-[#59232c] text-[#59232c]" :
-                   theme === 'PERSONA' ? "bg-black text-white border-4 border-white skew-x-[12deg]" :
                    "bg-slate-100 text-slate-900"
                  )}>
                    <span className={clsx("block", theme === 'PHANTOM' && "skew-y-[-2deg]")}>Rest</span>
