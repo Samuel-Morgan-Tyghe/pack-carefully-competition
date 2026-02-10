@@ -798,10 +798,10 @@ function BattleScene({ theme }: { theme: Theme }) {
       
       <div className={clsx("flex-1 p-4 rounded bg-black/20 overflow-y-auto font-mono text-xs", theme === 'TERMINAL' && "text-green-500")}>
         <p className="opacity-50">Battle started...</p>
-        <p>> Hero uses Iron Sword! (5 DMG)</p>
-        <p>> Boss roars! (Morale -10%)</p>
-        <p>> Hero casts Fire Scroll! (12 DMG)</p>
-        <p className="animate-pulse">> Boss is preparing a heavy attack!</p>
+        <p>&gt; Hero uses Iron Sword! (5 DMG)</p>
+        <p>&gt; Boss roars! (Morale -10%)</p>
+        <p>&gt; Hero casts Fire Scroll! (12 DMG)</p>
+        <p className="animate-pulse">&gt; Boss is preparing a heavy attack!</p>
       </div>
 
       <div className="grid grid-cols-2 gap-2">
