@@ -18,13 +18,53 @@ interface Item {
 // --- Custom Item Graphics ---
 
 function ItemGraphic({ id, theme }: { id: string; theme: Theme }) {
-  // Common strokes/fills based on theme
+  // Determine style group
+  const style = 
+    ['WIREFRAME', 'CYBER', 'TERMINAL', 'AUTOMATA'].includes(theme) ? 'TECH' :
+    ['PAPER', 'CANDY', 'VAPOR'].includes(theme) ? 'SOFT' :
+    ['BRUTALIST', 'PHANTOM', 'NOIR'].includes(theme) ? 'BOLD' :
+    ['ELDEN', 'HADES', 'ROYAL', 'CURSED', 'STEAM', 'MIDNIGHT'].includes(theme) ? 'FANTASY' : 'DEFAULT';
+
   const strokeColor = 'currentColor';
   const strokeWidth = theme === 'WIREFRAME' ? 4 : 2;
   const fillOpacity = theme === 'WIREFRAME' ? 0 : 0.2;
 
   switch (id) {
     case 'sword': // 1x3 Tall
+      if (style === 'TECH') {
+        return (
+          <svg viewBox="0 0 100 300" className="w-full h-full" preserveAspectRatio="none">
+            {/* Tech Blade: Angular, segmented */}
+            <path d="M45 20 H55 V220 H45 Z" fill={strokeColor} fillOpacity={fillOpacity} stroke={strokeColor} strokeWidth={strokeWidth} />
+            <path d="M30 220 H70 V240 H30 Z" fill="none" stroke={strokeColor} strokeWidth={strokeWidth} />
+            <path d="M45 240 H55 V280 H45 Z" fill="none" stroke={strokeColor} strokeWidth={strokeWidth} />
+            {/* Circuit details */}
+            <path d="M50 40 V180 M35 225 H65" stroke={strokeColor} strokeWidth={1} />
+          </svg>
+        );
+      }
+      if (style === 'SOFT') {
+        return (
+          <svg viewBox="0 0 100 300" className="w-full h-full" preserveAspectRatio="none">
+            {/* Soft Blade: Rounded, cartoony */}
+            <path d="M50 20 Q70 50 70 150 Q70 200 50 220 Q30 200 30 150 Q30 50 50 20 Z" 
+                  fill={strokeColor} fillOpacity={fillOpacity} stroke={strokeColor} strokeWidth={strokeWidth * 2} strokeLinecap="round" />
+            <path d="M25 220 H75" stroke={strokeColor} strokeWidth={strokeWidth * 3} strokeLinecap="round" />
+            <path d="M50 220 V280" stroke={strokeColor} strokeWidth={strokeWidth * 3} strokeLinecap="round" />
+          </svg>
+        );
+      }
+      if (style === 'BOLD') {
+        return (
+          <svg viewBox="0 0 100 300" className="w-full h-full" preserveAspectRatio="none">
+            {/* Bold Blade: Thick blocky shape */}
+            <rect x="40" y="20" width="20" height="200" fill={strokeColor} />
+            <rect x="20" y="220" width="60" height="20" fill={strokeColor} />
+            <rect x="45" y="240" width="10" height="40" fill={strokeColor} />
+          </svg>
+        );
+      }
+      // FANTASY / DEFAULT
       return (
         <svg viewBox="0 0 100 300" className="w-full h-full" preserveAspectRatio="none">
           <path 
@@ -43,7 +83,35 @@ function ItemGraphic({ id, theme }: { id: string; theme: Theme }) {
           />
         </svg>
       );
+
     case 'potion': // 1x1
+      if (style === 'TECH') {
+        return (
+          <svg viewBox="0 0 100 100" className="w-full h-full" preserveAspectRatio="none">
+            {/* Tech Vial: Hexagonal */}
+            <path d="M30 20 L70 20 L80 40 L80 80 L20 80 L20 40 Z" fill={strokeColor} fillOpacity={fillOpacity} stroke={strokeColor} strokeWidth={strokeWidth} />
+            <path d="M20 40 L80 40 M30 80 V20 M70 80 V20" stroke={strokeColor} strokeWidth={1} opacity="0.5" />
+          </svg>
+        );
+      }
+      if (style === 'SOFT') {
+        return (
+          <svg viewBox="0 0 100 100" className="w-full h-full" preserveAspectRatio="none">
+            {/* Soft Potion: Round flask */}
+            <circle cx="50" cy="60" r="30" fill={strokeColor} fillOpacity={fillOpacity} stroke={strokeColor} strokeWidth={strokeWidth * 2} />
+            <rect x="40" y="10" width="20" height="25" fill={strokeColor} fillOpacity={fillOpacity} />
+            <path d="M40 10 H60" stroke={strokeColor} strokeWidth={strokeWidth * 2} strokeLinecap="round" />
+          </svg>
+        );
+      }
+      if (style === 'BOLD') {
+        return (
+          <svg viewBox="0 0 100 100" className="w-full h-full" preserveAspectRatio="none">
+            <rect x="25" y="30" width="50" height="60" fill={strokeColor} />
+            <rect x="40" y="10" width="20" height="20" fill={strokeColor} />
+          </svg>
+        );
+      }
       return (
         <svg viewBox="0 0 100 100" className="w-full h-full" preserveAspectRatio="none">
           <path
@@ -56,7 +124,37 @@ function ItemGraphic({ id, theme }: { id: string; theme: Theme }) {
           <path d="M30 25 L70 25" stroke={strokeColor} strokeWidth={strokeWidth * 2} />
         </svg>
       );
+
     case 'scroll': // 2x2 Square-ish
+      if (style === 'TECH') {
+        return (
+          <svg viewBox="0 0 200 200" className="w-full h-full" preserveAspectRatio="none">
+            {/* Tech Datapad */}
+            <rect x="20" y="20" width="160" height="160" rx="10" fill={strokeColor} fillOpacity={fillOpacity} stroke={strokeColor} strokeWidth={strokeWidth} />
+            <path d="M40 40 H160 M40 60 H160 M40 80 H100 M40 140 H160" stroke={strokeColor} strokeWidth={2} />
+            <rect x="120" y="80" width="40" height="40" fill="none" stroke={strokeColor} strokeWidth={1} />
+          </svg>
+        );
+      }
+      if (style === 'SOFT') {
+        return (
+          <svg viewBox="0 0 200 200" className="w-full h-full" preserveAspectRatio="none">
+            {/* Rolled paper */}
+            <path d="M40 30 Q100 10 160 30 V170 Q100 190 40 170 Z" fill={strokeColor} fillOpacity={fillOpacity} stroke={strokeColor} strokeWidth={strokeWidth * 2} />
+            <path d="M50 50 H150 M50 80 H150" stroke={strokeColor} strokeWidth={strokeWidth} strokeLinecap="round" strokeDasharray="10 10" />
+          </svg>
+        );
+      }
+      if (style === 'BOLD') {
+        return (
+          <svg viewBox="0 0 200 200" className="w-full h-full" preserveAspectRatio="none">
+            <rect x="30" y="30" width="140" height="140" fill={strokeColor} />
+            <rect x="50" y="50" width="100" height="20" fill="white" />
+            <rect x="50" y="90" width="100" height="20" fill="white" />
+            <rect x="50" y="130" width="60" height="20" fill="white" />
+          </svg>
+        );
+      }
       return (
         <svg viewBox="0 0 200 200" className="w-full h-full" preserveAspectRatio="none">
           <path
@@ -69,7 +167,25 @@ function ItemGraphic({ id, theme }: { id: string; theme: Theme }) {
           <path d="M40 50 H160 M40 90 H160 M40 130 H120" stroke={strokeColor} strokeWidth={strokeWidth * 2} strokeLinecap="round" />
         </svg>
       );
+
     case 'junk': // 2x2
+      if (style === 'TECH') {
+        return (
+          <svg viewBox="0 0 200 200" className="w-full h-full" preserveAspectRatio="none">
+            {/* Scrap Metal */}
+            <path d="M20 20 H100 V80 H180 V180 H20 Z" fill="none" stroke={strokeColor} strokeWidth={strokeWidth} />
+            <line x1="20" y1="20" x2="180" y2="180" stroke={strokeColor} strokeWidth={1} />
+            <line x1="100" y1="20" x2="20" y2="180" stroke={strokeColor} strokeWidth={1} />
+          </svg>
+        );
+      }
+      if (style === 'BOLD') {
+        return (
+          <svg viewBox="0 0 200 200" className="w-full h-full" preserveAspectRatio="none">
+            <polygon points="10,190 190,190 100,10" fill={strokeColor} />
+          </svg>
+        );
+      }
       return (
         <svg viewBox="0 0 200 200" className="w-full h-full" preserveAspectRatio="none">
           <path
@@ -82,14 +198,23 @@ function ItemGraphic({ id, theme }: { id: string; theme: Theme }) {
           <path d="M10 10 L190 190 M190 10 L10 190" stroke={strokeColor} strokeWidth={strokeWidth} strokeOpacity="0.5" />
         </svg>
       );
+
     case 'chip': // 1x1
       return (
         <svg viewBox="0 0 100 100" className="w-full h-full" preserveAspectRatio="none">
-          <rect x="10" y="10" width="80" height="80" rx="5" fill={strokeColor} fillOpacity={fillOpacity} stroke={strokeColor} strokeWidth={strokeWidth * 2} />
+          <rect x="10" y="10" width="80" height="80" rx={style === 'SOFT' ? 20 : 5} fill={strokeColor} fillOpacity={fillOpacity} stroke={strokeColor} strokeWidth={strokeWidth * 2} />
           <path d="M10 25 H5 M10 50 H5 M10 75 H5 M90 25 H95 M90 50 H95 M90 75 H95 M25 10 V5 M50 10 V5 M75 10 V5 M25 90 V95 M50 90 V95 M75 90 V95" stroke={strokeColor} strokeWidth={strokeWidth * 2} />
         </svg>
       );
+
     case 'relic': // 1x1
+      if (style === 'BOLD') {
+        return (
+          <svg viewBox="0 0 100 100" className="w-full h-full" preserveAspectRatio="none">
+            <circle cx="50" cy="50" r="40" fill={strokeColor} />
+          </svg>
+        );
+      }
       return (
         <svg viewBox="0 0 100 100" className="w-full h-full" preserveAspectRatio="none">
           <path
@@ -102,6 +227,7 @@ function ItemGraphic({ id, theme }: { id: string; theme: Theme }) {
           <circle cx="50" cy="50" r="20" fill="none" stroke={strokeColor} strokeWidth={strokeWidth} />
         </svg>
       );
+
     default:
       return null;
   }
