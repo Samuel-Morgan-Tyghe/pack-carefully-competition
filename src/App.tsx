@@ -691,7 +691,113 @@ function Dropdown<T extends string>({
   );
 }
 
-// --- Scene Components ---
+// --- Layouts ---
+
+const StandardLayout = ({ children, theme }: { children: React.ReactNode; theme: Theme }) => (
+  <div className="w-full h-full flex flex-col gap-4">
+    {children}
+  </div>
+);
+
+const HUDLayout = ({ children, theme }: { children: React.ReactNode; theme: Theme }) => {
+  // Extract children to place them in specific HUD zones
+  const kids = React.Children.toArray(children);
+  const statusCard = kids[0]; // Player status
+  const mainContent = kids[1]; // Grid/Battle
+  const actionBar = kids[2]; // Buttons (if present)
+
+  return (
+    <div className="w-full h-full relative p-4 flex flex-col items-center justify-center">
+      {/* Corner Brackets */}
+      <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-current opacity-50" />
+      <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-current opacity-50" />
+      <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-current opacity-50" />
+      <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-current opacity-50" />
+      
+      {/* Status Top-Right Fixed */}
+      <div className="absolute top-0 right-12 z-20 scale-75 origin-top-right">
+        {statusCard}
+      </div>
+
+      {/* Main Content Centered */}
+      <div className="w-full max-w-sm z-10 my-auto">
+        {mainContent}
+      </div>
+
+      {/* Action Bar Bottom Fixed */}
+      <div className="absolute bottom-4 w-full max-w-sm z-20">
+        {actionBar}
+      </div>
+    </div>
+  );
+};
+
+const OSLayout = ({ children, theme }: { children: React.ReactNode; theme: Theme }) => {
+  const kids = React.Children.toArray(children);
+  return (
+    <div className="w-full h-full flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-black/80 backdrop-blur-xl border border-white/20 rounded-lg shadow-2xl overflow-hidden flex flex-col h-[80vh]">
+        {/* Window Title Bar */}
+        <div className="bg-white/10 p-2 flex items-center gap-2 border-b border-white/10">
+          <div className="flex gap-1.5">
+            <div className="w-3 h-3 rounded-full bg-red-500/50" />
+            <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
+            <div className="w-3 h-3 rounded-full bg-green-500/50" />
+          </div>
+          <span className="text-xs font-mono ml-2 opacity-50">pack_carefully.exe</span>
+        </div>
+        
+        {/* Content Area */}
+        <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
+          {kids}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const JournalLayout = ({ children, theme }: { children: React.ReactNode; theme: Theme }) => {
+  return (
+    <div className="w-full h-full flex items-center justify-center p-2">
+      <div className="w-full max-w-md aspect-[3/4] bg-[#f0f0e0] shadow-[10px_10px_30px_rgba(0,0,0,0.3)] rotate-1 p-6 flex flex-col gap-4 relative overflow-hidden text-[#333]">
+        {/* Paper texture/lines */}
+        <div className="absolute inset-0 pointer-events-none opacity-10 bg-[linear-gradient(#000_1px,transparent_1px)] bg-[length:100%_24px] mt-8" />
+        <div className="absolute left-8 top-0 bottom-0 w-px bg-red-500/20 pointer-events-none" />
+        
+        {/* Content */}
+        <div className="relative z-10 flex flex-col gap-4 h-full">
+           {children}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const MobileLayout = ({ children, theme }: { children: React.ReactNode; theme: Theme }) => {
+  const kids = React.Children.toArray(children);
+  const statusCard = kids[0]; 
+  const mainContent = kids[1];
+  const actionBar = kids[2];
+
+  return (
+    <div className="w-full h-full flex justify-center items-center">
+       <div className="w-full max-w-sm h-[90vh] bg-white rounded-[3rem] border-8 border-black overflow-hidden relative flex flex-col shadow-2xl">
+          {/* Dynamic Island / Notch */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-black rounded-b-2xl z-50" />
+          
+          <div className="flex-1 overflow-y-auto pt-10 pb-24 px-4 flex flex-col gap-4 bg-gray-50">
+             {statusCard}
+             {mainContent}
+          </div>
+
+          {/* Floating Action Bar */}
+          <div className="absolute bottom-0 left-0 w-full p-4 bg-white/80 backdrop-blur border-t border-gray-200">
+             {actionBar}
+          </div>
+       </div>
+    </div>
+  );
+};
 
 function InventoryScene({ theme }: { theme: Theme }) {
   const currentTheme = themes[theme];
@@ -960,12 +1066,12 @@ function App() {
 
   const currentTheme = themes[theme];
 
-  const scenes = [
-    { id: 'INVENTORY', label: 'Inventory' },
-    { id: 'BATTLE', label: 'Auto Battle' },
-    { id: 'COMBINED', label: 'Combined' },
-    { id: 'INFO', label: 'Item Database' },
-  ];
+  // Determine Layout Wrapper
+  let LayoutWrapper = StandardLayout;
+  if (['CYBER', 'AUTOMATA', 'WIREFRAME', 'TERMINAL'].includes(theme)) LayoutWrapper = HUDLayout;
+  if (['VAPOR', 'MIDNIGHT', 'GLASS'].includes(theme)) LayoutWrapper = OSLayout;
+  if (['PAPER', 'CURSED', 'STEAM', 'NOIR'].includes(theme)) LayoutWrapper = JournalLayout;
+  if (['CANDY', 'ARCTIC'].includes(theme)) LayoutWrapper = MobileLayout;
 
   return (
     <div className={clsx(
