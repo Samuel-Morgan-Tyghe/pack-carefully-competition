@@ -1032,7 +1032,7 @@ function App() {
 
       {/* Header / Switcher */}
       <header className={clsx(
-        "z-10 w-full max-w-4xl flex flex-col md:flex-row justify-between items-center mb-8 p-4 gap-4 transition-all",
+        "z-50 w-full max-w-4xl flex flex-col md:flex-row justify-between items-center mb-8 p-4 gap-4 transition-all relative",
         theme === 'BRUTALIST' ? "border-b-8 border-black bg-white" :
         theme === 'PHANTOM' ? "bg-transparent text-white -skew-y-2" :
         theme === 'AUTOMATA' ? "bg-[#cfcbb3] border border-[#a8a490] rounded-sm" :
