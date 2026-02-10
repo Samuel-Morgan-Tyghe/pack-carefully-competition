@@ -925,9 +925,38 @@ function TraitorAlert({ theme }: { theme: Theme }) {
 }
 
 function App() {
-  const [theme, setTheme] = useState<Theme>('ELDEN');
-  const [scene, setScene] = useState<Scene>('INVENTORY');
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const urlTheme = params.get('theme') as Theme;
+      if (urlTheme && Object.keys(themes).includes(urlTheme)) {
+        return urlTheme;
+      }
+    }
+    return 'ELDEN';
+  });
+  
+  const [scene, setScene] = useState<Scene>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const urlScene = params.get('scene') as Scene;
+      const validScenes = ['INVENTORY', 'BATTLE', 'COMBINED', 'INFO'];
+      if (urlScene && validScenes.includes(urlScene)) {
+        return urlScene;
+      }
+    }
+    return 'INVENTORY';
+  });
+
   const [showTraitor, setShowTraitor] = useState(false);
+
+  // Sync state to URL
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    params.set('theme', theme);
+    params.set('scene', scene);
+    window.history.replaceState(null, '', `?${params.toString()}`);
+  }, [theme, scene]);
 
   const currentTheme = themes[theme];
 
